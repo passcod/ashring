@@ -1,0 +1,7 @@
+[package]
+name = "sherman"
+version = "0.0.1"
+authors = ["Félix Saparelli <felix@passcod.name>"]
+
+[dependencies.fuse]
+git = "https://github.com/zargony/rust-fuse.git"
