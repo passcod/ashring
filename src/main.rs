@@ -1,6 +1,7 @@
 #![feature(macro_rules)]
 #![feature(phase)]
 #[phase(plugin, link)] extern crate log;
+extern crate msgpack;
 
 use std::os;
 use std::io::File;

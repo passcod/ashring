@@ -3,5 +3,14 @@ name = "sherman"
 version = "0.0.1"
 authors = ["Félix Saparelli <felix@passcod.name>"]
 
-[dependencies.fuse]
-git = "https://github.com/zargony/rust-fuse.git"
+#[dependencies.rust-crypto]
+#git = "https://github.com/DaGenix/rust-crypto.git"
+
+#[dependencies.fuse]
+#git = "https://github.com/zargony/rust-fuse.git"
+
+[dependencies.msgpack]
+git = "https://github.com/mneumann/rust-msgpack.git"
+
+#[dependencies.xxhash]
+#git = "https://github.com/Jurily/rust-xxhash.git"

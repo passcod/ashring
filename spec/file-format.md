@@ -61,6 +61,7 @@ This is always 68 bytes long.
 
 The header is described here in its plaintext version. That plaintext is then
 encrypted according to the method above. The length of the ciphertext is then
-computed and that is the value given in the plain header.
+computed and that is the value given in the plain header. The plaintext header
+is formatted as [msgpack](http://msgpack.org/).
 
-//
+
