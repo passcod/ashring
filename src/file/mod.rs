@@ -1,11 +1,10 @@
 #![allow(dead_code)]
-use std::io::{File, MemReader};
+use std::io::{File, IoError, IoResult, MemReader, MismatchedFileTypeForOperation};
 
 pub use self::header::{EncryptedHeader, PlainHeader};
 pub use self::filename::EncryptedFilename;
 pub use self::data::EncryptedData;
 
-pub mod err;
 pub mod filename;
 pub mod header;
 pub mod data;
@@ -13,7 +12,7 @@ pub mod data;
 macro_rules! trunc(
   ($act:expr, $r:ident: $res:block) =>
   (match $act {
-    Err(e) => return Err(err::Io(e)),
+    Err(e) => return Err(e),
     Ok($r) => $res
   })
 )
@@ -37,43 +36,39 @@ pub struct EncryptedFile<'file> {
 
 impl<'r> EncryptedFile<'r> {
   /// Loads a normal file and parses the pre- and plain- header.
-  pub fn from_file(f: &'r mut File) -> Result<EncryptedFile, err::Reason> {
+  pub fn from_file(f: &'r mut File) -> IoResult<EncryptedFile> {
     debug!("Path: {}", f.path().to_c_str());
 
-    trunc!(f.read_exact(7), magic: {
-      if magic.as_slice() != MAGIC {
-        return Err(err::MagicNotFound);
-      } else {
-        debug!("Magic number: ok");
-      }
-    });
+    let magic = try!(f.read_exact(7));
+    if magic.as_slice() != &MAGIC {
+      return Err(IoError {
+        kind: MismatchedFileTypeForOperation,
+        desc: "Magic not found",
+        detail: None
+      });
+    } else {
+      debug!("Magic number: ok");
+    }
 
-    let version: u8;
-    trunc!(f.read_byte(), b: { version = b });
+    let version = try!(f.read_byte());
     debug!("Version: {}", version);
 
-    let header_size: u64;
-    trunc!(f.read_be_u64(), b: { header_size = b });
+    let header_size = try!(f.read_be_u64());
     debug!("Header Size: {}", header_size);
 
-    let header_iv: Vec<u8>;
-    trunc!(f.read_exact(16), b: { header_iv = b });
+    let header_iv = try!(f.read_exact(16));
     debug!("Header IV: {}", header_iv);
 
-    let filename_iv: Vec<u8>;
-    trunc!(f.read_exact(16), b: { filename_iv = b });
+    let filename_iv = try!(f.read_exact(16));
     debug!("Filename IV: {}", filename_iv);
 
-    let payload_iv: Vec<u8>;
-    trunc!(f.read_exact(16), b: { payload_iv = b });
+    let payload_iv = try!(f.read_exact(16));
     debug!("Payload IV: {}", payload_iv);
 
-    let flags: Flags;
-    trunc!(f.read_be_u32(), b: { flags = Flags { bits: b } });
+    let flags = Flags {bits: try!(f.read_be_u32()) };
     debug!("Flags: {}", flags);
 
-    let header: Vec<u8>;
-    trunc!(f.read_exact(header_size as uint), b: { header = b });
+    let header = try!(f.read_exact(header_size as uint));
     debug!("Header: {}", header);
  
     Ok(EncryptedFile{

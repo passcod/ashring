@@ -5,7 +5,11 @@ pub struct EncryptedHeader {
   raw: MemReader,
   iv: Vec<u8>,
   key: Option<Vec<u8>>,
-  decrypted: Option<Vec<u8>>
+  decrypted: Option<DecryptedHeader>
+}
+
+pub struct DecryptedHeader {
+  raw: Vec<u8>
 }
 
 impl EncryptedHeader {
@@ -17,6 +21,10 @@ impl EncryptedHeader {
       key: None,
       decrypted: None
     }
+  }
+
+  pub fn decrypt(k: Vec<u8>) -> Option<()> {
+    None
   }
 }
 
