@@ -1,24 +1,37 @@
 use std::{fmt, mem};
 use std::io::{File, IoResult, SeekSet};
+use super::Flags;
 
 pub struct EncryptedData<'file> {
   raw: &'file mut File,
   iv: Vec<u8>,
   key: Option<Vec<u8>>,
+  flags: Flags,
 
-  /// Start of File — where the data starts in `raw`.
-  sof: i64
+  /// Offset — where the data starts in `raw`.
+  offset: i64
 }
 
 impl<'file> EncryptedData<'file> {
   /// Initialise in encrypted state.
-  pub fn new(f: &'file mut File, iv: Vec<u8>, sof: i64) -> EncryptedData {
+  pub fn new(f: &'file mut File, iv: Vec<u8>) -> EncryptedData {
     EncryptedData {
       raw: f,
       iv: iv,
       key: None,
-      sof: sof
+      flags: Flags { bits: 0 },
+      offset: 0
     }
+  }
+
+  pub fn set_flags(&mut self, fl: Flags) -> Flags {
+    use std::mem::replace;
+    replace(&mut self.flags, fl)
+  }
+
+  pub fn set_offset(&mut self, off: i64) -> i64 {
+    use std::mem::replace;
+    replace(&mut self.offset, off)
   }
 
   /// Rewind to original position.
@@ -26,7 +39,7 @@ impl<'file> EncryptedData<'file> {
   /// This doesn't rewind to the beginning of the file, but rather to just
   /// before the first byte of the encrypted data within the file.
   pub fn rewind(&mut self) -> IoResult<()> {
-    self.raw.seek(self.sof, SeekSet)
+    self.raw.seek(self.offset, SeekSet)
   }
 
   // BADCODE

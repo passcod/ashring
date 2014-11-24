@@ -8,6 +8,8 @@ succeptible to obvious attacks, not keep your data safe, eat your data,
 self-destruct, trash your laundry, steal your lunch money, and otherwise be
 unreliable for serious use. You have been warned.
 
+OpenSSL is used for asymmetric cryptography until rust-crypto gets there.
+
 ## Intro
 
 Sherman works as a FUSE filesystem. To create a Sherman _box_, or to access

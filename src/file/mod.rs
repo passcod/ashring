@@ -1,21 +1,13 @@
 #![allow(dead_code)]
 use std::io::{File, IoError, IoResult, MemReader, MismatchedFileTypeForOperation};
 
-pub use self::header::{EncryptedHeader, PlainHeader};
-pub use self::filename::EncryptedFilename;
 pub use self::data::EncryptedData;
+pub use self::filename::{EncryptedFilename, Filename};
+pub use self::metadata::{EncryptedMetadata, Metadata};
 
-pub mod filename;
-pub mod header;
 pub mod data;
-
-macro_rules! trunc(
-  ($act:expr, $r:ident: $res:block) =>
-  (match $act {
-    Err(e) => return Err(e),
-    Ok($r) => $res
-  })
-)
+pub mod filename;
+pub mod metadata;
 
 const MAGIC: [u8, ..7] = [0x53, 0x68, 0x65, 0x72, 0x6d, 0x61, 0x6e];
 
@@ -29,8 +21,7 @@ bitflags! {
 pub struct EncryptedFile<'file> {
   pub version: u8,
   pub flags: Flags,
-  pub filename: EncryptedFilename,
-  pub header: EncryptedHeader,
+  pub metadata: EncryptedMetadata,
   pub data: EncryptedData<'file>
 }
 
@@ -71,12 +62,22 @@ impl<'r> EncryptedFile<'r> {
     let header = try!(f.read_exact(header_size as uint));
     debug!("Header: {}", header);
  
+    let mut filename = EncryptedFilename::new(f.path().clone(), filename_iv);
+    filename.set_flags(flags);
+
+    let mut metadata = EncryptedMetadata::new(MemReader::new(header), header_iv);
+    metadata.set_flags(flags);
+    metadata.set_filename(filename);
+
+    let mut data = EncryptedData::new(f, payload_iv);
+    data.set_flags(flags);
+    data.set_offset((68 + header_size) as i64);
+
     Ok(EncryptedFile{
       version: version,
       flags: flags,
-      filename: EncryptedFilename::new(f.path().clone(), filename_iv), //FIXME: needs support for extended filenames
-      header: EncryptedHeader::new(MemReader::new(header), header_iv),
-      data: EncryptedData::new(f, payload_iv, (68 + header_size) as i64)
+      metadata: metadata,
+      data: data
     })
   }
 }

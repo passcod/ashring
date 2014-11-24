@@ -3,14 +3,19 @@ name = "sherman"
 version = "0.0.1"
 authors = ["Félix Saparelli <felix@passcod.name>"]
 
-#[dependencies.rust-crypto]
-#git = "https://github.com/DaGenix/rust-crypto.git"
+[dependencies.rust-crypto]
+rust-crypto = "~0.1.1"
 
-#[dependencies.fuse]
-#git = "https://github.com/zargony/rust-fuse.git"
+[dependencies.openssl]
+openssl = "~0.0.2"
 
 [dependencies.msgpack]
 git = "https://github.com/mneumann/rust-msgpack.git"
 
-#[dependencies.xxhash]
-#git = "https://github.com/Jurily/rust-xxhash.git"
+[dependencies.xxhash]
+xxhash = "~0.0.1"
+
+[dependencies.fuse]
+#git = "https://github.com/zargony/rust-fuse.git"
+git = "https://github.com/abspoel/rust-fuse.git"
+branch = "update-to-nightly"
