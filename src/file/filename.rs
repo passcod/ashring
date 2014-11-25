@@ -14,7 +14,6 @@ pub struct Filename {
 }
 
 impl EncryptedFilename {
-  /// Initialise a filename, in encrypted state.
   pub fn new(p: Path, iv: Vec<u8>) -> EncryptedFilename {
     EncryptedFilename {
       raw: p,

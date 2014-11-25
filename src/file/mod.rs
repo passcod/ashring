@@ -9,7 +9,7 @@ pub mod data;
 pub mod filename;
 pub mod metadata;
 
-const MAGIC: [u8, ..7] = [0x53, 0x68, 0x65, 0x72, 0x6d, 0x61, 0x6e];
+const MAGIC: [u8, ..7] = [0x61, 0x73, 0x68, 0x72, 0x69, 0x6e, 0x67];
 
 bitflags! {
   #[deriving(Show)]
@@ -26,7 +26,6 @@ pub struct EncryptedFile<'file> {
 }
 
 impl<'r> EncryptedFile<'r> {
-  /// Loads a normal file and parses the pre- and plain- header.
   pub fn from_file(f: &'r mut File) -> IoResult<EncryptedFile> {
     debug!("Path: {}", f.path().to_c_str());
 

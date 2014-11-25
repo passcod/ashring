@@ -1,19 +1,21 @@
-# Sherman
+# Ashring
 
 ___NOT FOR CRITICAL USE___ This started as a toy project and grew a bit. I do
 not know as much about cryptography as I should. There are probably glaring
 flaws in the design and/or implementation that I have completely overlooked.
-At this stage, and until it has been checked by security folks, Sherman may: be
+At this stage, and until it has been checked by security folks, Ashring may: be
 succeptible to obvious attacks, not keep your data safe, eat your data,
 self-destruct, trash your laundry, steal your lunch money, and otherwise be
 unreliable for serious use. You have been warned.
 
 OpenSSL is used for asymmetric cryptography until rust-crypto gets there.
 
+Ashring was previously named Sherman and that name may linger in places.
+
 ## Intro
 
-Sherman works as a FUSE filesystem. To create a Sherman _box_, or to access
-one, simply use the `sherman`binary with a path and a mountpoint. It will ask
+Ashring works as a FUSE filesystem. To create an Ashring _box_, or to access
+one, simply use the `ashring` binary with a path and a mountpoint. It will ask
 you for the mode (one of "simple", "shared", "cooperative", or "shared
 cooperative"), for additional settings if necessary, and for one or more
 passphrases depending on the mode. The mountpoint will then be available for
@@ -21,13 +23,13 @@ you to use as a folder. To unmount, use `fusermount -u <mountpoint>`.
 
 ## Modes
 
-Sherman has four modes, which vary how and how many passphrases are required to
+Ashring has four modes, which vary how and how many passphrases are required to
 open a box:
 
 ### Simple
 
 This is the classical mode of operation for an encrypted thing, and the one
-Sherman provides by default. It's really simple, you've done it a thousand
+Ashring provides by default. It's really simple, you've done it a thousand
 times: to open the box, you need one passphrase. That's it.
 
 But like every secret, you shouldn't give it to someone else. So what if you
@@ -58,7 +60,7 @@ required to open the box. If Alice, Bob and Carol each have a passphrase, and
 you specify that two passphrases are required, Alice and Bob, or Bob and Carol,
 or Alice and Carol, can open the box without the third member needing to be
 there. In a wider situation, say you are in a team of developers. There is a
-`3 in N` shared cooperative Sherman box which contains the SSH keys required
+`3 in N` shared cooperative Ashring box which contains the SSH keys required
 to access a server, thus you can only push new code or make a change to
 production when two other people support your decision.
 
@@ -89,7 +91,7 @@ and the way encryption is done as assymetric encryption is required.
 
 ### Three
 
-In version 3, simple support for multiple boxes within the one Sherman mount
+In version 3, simple support for multiple boxes within the one Ashring mount
 will be added. This means it will be possible to have multiple passphrases (or
 sets of passphrases, etc) which each access a *different* set of encrypted
 files and folders. Each box will still support the full range of features
@@ -122,7 +124,7 @@ boxes to have different access levels within the same mount.
 _May change without notice_
 
 Investigate partial origins, which would allow an origin folder (that which
-contains the encrypted versions of the files in a Sherman box) to be
+contains the encrypted versions of the files in an Ashring box) to be
 partially downloaded from a server or peer and still be functional. Also
-investigate hooks that would allow Sherman to request and push files from and
+investigate hooks that would allow Ashring to request and push files from and
 to the remote host as needed by the user.

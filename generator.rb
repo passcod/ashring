@@ -44,7 +44,7 @@ f_ci = prep_cipher
 f = f_ci[:enc].update(filename) + f_ci[:enc].final
 f_len = f.length
 
-out = "Sherman\x00"           # Magic
+out = "ashring\x00"           # Magic
 
 out += [0,h_len].pack('NN')   # Size of header
 
@@ -57,4 +57,4 @@ out += [0].pack('N')          # Flags
 out += h
 out += p
 
-File.write((f.unpack('h' * f.length).join + '.sherman'), out)
+File.write((f.unpack('h' * f.length).join + '.ashring'), out)

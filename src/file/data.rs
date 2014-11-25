@@ -13,7 +13,6 @@ pub struct EncryptedData<'file> {
 }
 
 impl<'file> EncryptedData<'file> {
-  /// Initialise in encrypted state.
   pub fn new(f: &'file mut File, iv: Vec<u8>) -> EncryptedData {
     EncryptedData {
       raw: f,
