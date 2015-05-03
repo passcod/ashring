@@ -4,14 +4,10 @@ version = "0.0.1"
 authors = ["Félix Saparelli <felix@passcod.name>"]
 
 [dependencies]
-openssl = "~0.0.2"
-rust-crypto = "~0.1.1"
-xxhash = "~0.0.1"
-
-[dependencies.msgpack]
-git = "https://github.com/mneumann/rust-msgpack.git"
-
-[dependencies.fuse]
-#git = "https://github.com/zargony/rust-fuse.git"
-git = "https://github.com/abspoel/rust-fuse.git"
-branch = "update-to-nightly"
+fuse = "0.2"
+msgpack = "0.1"
+openssl = "0.2"
+rust-crypto = "0.2"
+secrets = "0.9"
+time = "0.1"
+xxhash = "0.0"

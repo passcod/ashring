@@ -1,3 +1,4 @@
+use crypto::{aes, blockmodes};
 use std::fmt;
 use std::io::MemReader;
 use super::{EncryptedFilename, Flags};
@@ -43,6 +44,8 @@ impl EncryptedMetadata {
   }
 
   pub fn decrypt(&mut self, k: Vec<u8>) -> Result<&mut Metadata,Error> {
+    let decryptor = aes::cbc_decryptor(
+      aes::KeySize::KeySize256, k.as_slice(), self.iv.as_slice(), blockmodes::PkcsPadding);
     Err(Error::GarbledOutput)
   }
 }
